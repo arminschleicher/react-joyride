@@ -20,7 +20,7 @@ export default {
   },
   step: {
     event: 'click',
-    placement: 'bottom',
+    placement: 'top',
     offset: 10,
   },
 };

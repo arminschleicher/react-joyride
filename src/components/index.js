@@ -80,7 +80,7 @@ class Joyride extends React.Component {
 
   componentDidMount() {
     if (!canUseDOM) return;
-
+    const storage = localStorage;
     const { disableCloseOnEsc, debug, run, steps } = this.props;
     const { start } = this.store;
 
@@ -91,6 +91,15 @@ class Joyride extends React.Component {
     /* istanbul ignore else */
     if (!disableCloseOnEsc) {
       document.body.addEventListener('keydown', this.handleKeyboard, { passive: true });
+    }
+
+    if (storage && !storage.getItem('joyride-seen')) {
+      setTimeout(() => {
+        this.store.update({
+          lifecycle: LIFECYCLE.TOOLTIP,
+        });
+        storage.setItem('joyride-seen', true);
+      }, 500);
     }
   }
 
@@ -227,7 +236,6 @@ class Joyride extends React.Component {
 
   initStore = () => {
     const { debug, getHelpers, run, stepIndex } = this.props;
-
     this.store = new Store({
       ...this.props,
       controlled: run && is.number(stepIndex),
@@ -246,7 +254,6 @@ class Joyride extends React.Component {
     addListener(this.syncState);
 
     getHelpers(this.helpers);
-
     return this.store.getState();
   };
 
@@ -369,7 +376,6 @@ class Joyride extends React.Component {
 
   render() {
     if (!canUseDOM) return null;
-
     const { index, status } = this.state;
     const { continuous, debug, steps } = this.props;
     const step = getMergedStep(steps[index], this.props);
