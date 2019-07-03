@@ -103,6 +103,10 @@ export default class JoyrideTooltip extends React.Component {
     const { continuous, index, isLastStep, size, step } = this.props;
     const { beaconComponent, tooltipComponent, ...cleanStep } = step;
     let component;
+    const storage = localStorage;
+    if (isLastStep) {
+      storage.setItem('joyride-seen', true);
+    }
 
     if (tooltipComponent) {
       const renderProps = {
