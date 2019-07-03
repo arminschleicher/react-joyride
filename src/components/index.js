@@ -99,7 +99,7 @@ class Joyride extends React.Component {
           lifecycle: LIFECYCLE.TOOLTIP,
         });
         storage.setItem('joyride-seen', true);
-      }, 500);
+      }, 1500);
     }
   }
 
