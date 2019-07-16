@@ -27,6 +27,7 @@ export default class JoyrideStep extends React.Component {
     controlled: PropTypes.bool.isRequired,
     debug: PropTypes.bool.isRequired,
     helpers: PropTypes.object.isRequired,
+    id: PropTypes.string,
     index: PropTypes.number.isRequired,
     lifecycle: PropTypes.string.isRequired,
     setPopper: PropTypes.func.isRequired,
@@ -257,7 +258,7 @@ export default class JoyrideStep extends React.Component {
   }
 
   render() {
-    const { continuous, debug, helpers, index, lifecycle, size, step } = this.props;
+    const { continuous, debug, helpers, index, lifecycle, size, step, id } = this.props;
     const target = getElement(step.target);
 
     if (!validateStep(step) || !is.domElement(target)) {
@@ -279,6 +280,7 @@ export default class JoyrideStep extends React.Component {
             <Tooltip
               continuous={continuous}
               helpers={helpers}
+              id={id}
               index={index}
               isLastStep={index + 1 === size}
               setTooltipRef={this.setTooltipRef}

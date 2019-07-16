@@ -44,6 +44,7 @@ class Joyride extends React.Component {
     }),
     getHelpers: PropTypes.func,
     hideBackButton: PropTypes.bool,
+    id: PropTypes.string,
     locale: PropTypes.object,
     run: PropTypes.bool,
     scrollOffset: PropTypes.number,
@@ -68,6 +69,7 @@ class Joyride extends React.Component {
     disableScrollParentFix: false,
     getHelpers: () => {},
     hideBackButton: false,
+    id: 'joyride',
     run: true,
     scrollOffset: 20,
     scrollToFirstStep: false,
@@ -81,7 +83,7 @@ class Joyride extends React.Component {
   componentDidMount() {
     if (!canUseDOM) return;
     const storage = localStorage;
-    const { disableCloseOnEsc, debug, run, steps } = this.props;
+    const { disableCloseOnEsc, debug, run, steps, id } = this.props;
     const { start } = this.store;
 
     if (validateSteps(steps, debug) && run) {
@@ -93,7 +95,7 @@ class Joyride extends React.Component {
       document.body.addEventListener('keydown', this.handleKeyboard, { passive: true });
     }
 
-    if (storage && !storage.getItem('joyride-seen')) {
+    if (!(storage && storage.getItem(`${id}-seen`))) {
       setTimeout(() => {
         this.store.update({
           lifecycle: LIFECYCLE.TOOLTIP,
@@ -376,13 +378,14 @@ class Joyride extends React.Component {
   render() {
     if (!canUseDOM) return null;
     const { index, status } = this.state;
-    const { continuous, debug, steps } = this.props;
+    const { continuous, debug, steps, id } = this.props;
     const step = getMergedStep(steps[index], this.props);
     let output;
 
     if (status === STATUS.RUNNING && step) {
       output = (
         <Step
+          id={id}
           {...this.state}
           callback={this.callback}
           continuous={continuous}

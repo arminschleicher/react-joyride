@@ -7,12 +7,22 @@ export default class JoyrideTooltip extends React.Component {
   static propTypes = {
     continuous: PropTypes.bool.isRequired,
     helpers: PropTypes.object.isRequired,
+    id: PropTypes.string,
     index: PropTypes.number.isRequired,
     isLastStep: PropTypes.bool.isRequired,
     setTooltipRef: PropTypes.func.isRequired,
     size: PropTypes.number.isRequired,
     step: PropTypes.object.isRequired,
   };
+
+  componentDidMount() {
+    const { isLastStep, id } = this.props;
+    const storage = localStorage;
+    const storeId = `${id}-seen`;
+    if (isLastStep && !storage.getItem(storeId)) {
+      storage.setItem(storeId, true);
+    }
+  }
 
   handleClickBack = e => {
     e.preventDefault();
@@ -100,13 +110,9 @@ export default class JoyrideTooltip extends React.Component {
   };
 
   render() {
-    const { continuous, index, isLastStep, size, step } = this.props;
+    const { continuous, index, isLastStep, size, step, id } = this.props;
     const { beaconComponent, tooltipComponent, ...cleanStep } = step;
     let component;
-    const storage = localStorage;
-    if (isLastStep) {
-      storage.setItem('joyride-seen', true);
-    }
 
     if (tooltipComponent) {
       const renderProps = {
