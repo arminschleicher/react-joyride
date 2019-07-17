@@ -46,9 +46,11 @@ class Joyride extends React.Component {
     hideBackButton: PropTypes.bool,
     id: PropTypes.string,
     locale: PropTypes.object,
+    mount: PropTypes.bool,
     run: PropTypes.bool,
     scrollOffset: PropTypes.number,
     scrollToFirstStep: PropTypes.bool,
+    showOnceOnly: PropTypes.bool,
     showProgress: PropTypes.bool,
     showSkipButton: PropTypes.bool,
     spotlightClicks: PropTypes.bool,
@@ -71,6 +73,8 @@ class Joyride extends React.Component {
     hideBackButton: false,
     id: 'joyride',
     run: true,
+    mount: true,
+    showOnceOnly: true,
     scrollOffset: 20,
     scrollToFirstStep: false,
     showSkipButton: false,
@@ -81,9 +85,10 @@ class Joyride extends React.Component {
   };
 
   componentDidMount() {
-    if (!canUseDOM) return;
+    const { disableCloseOnEsc, debug, run, steps, id, mount } = this.props;
+    if (!canUseDOM || !mount) return;
     const storage = localStorage;
-    const { disableCloseOnEsc, debug, run, steps, id } = this.props;
+    console.log('JOYRIDE MOUNTED', id);
     const { start } = this.store;
 
     if (validateSteps(steps, debug) && run) {
@@ -96,11 +101,13 @@ class Joyride extends React.Component {
     }
 
     if (!(storage && storage.getItem(`${id}-seen`))) {
+      console.log('setting timeout for tooltip lifecycle');
       setTimeout(() => {
+        console.log('showing tooltip', id);
         this.store.update({
           lifecycle: LIFECYCLE.TOOLTIP,
         });
-      }, 1500);
+      }, 3000);
     }
   }
 
@@ -108,7 +115,9 @@ class Joyride extends React.Component {
     if (!canUseDOM) return;
 
     const { action, controlled, index, lifecycle, status } = this.state;
-    const { debug, run, stepIndex, steps } = this.props;
+    const { debug, run, stepIndex, steps, mount } = this.props;
+
+    if (!mount) return;
     const { steps: prevSteps, stepIndex: prevStepIndex } = prevProps;
     const { setSteps, reset, start, stop, update } = this.store;
     const { changed: changedProps } = treeChanges(prevProps, this.props);
@@ -377,8 +386,15 @@ class Joyride extends React.Component {
 
   render() {
     if (!canUseDOM) return null;
+    const { continuous, debug, steps, id, mount, showOnceOnly } = this.props;
+    if (!mount) return null;
+    const storage = localStorage;
+    console.log('checking mount ', id, storage.getItem(`${id}-seen`), this.props);
+    if (showOnceOnly && storage.getItem(`${id}-seen`)) {
+      console.log('shouldnt mount');
+      return null;
+    }
     const { index, status } = this.state;
-    const { continuous, debug, steps, id } = this.props;
     const step = getMergedStep(steps[index], this.props);
     let output;
 

@@ -15,15 +15,6 @@ export default class JoyrideTooltip extends React.Component {
     step: PropTypes.object.isRequired,
   };
 
-  componentDidMount() {
-    const { isLastStep, id } = this.props;
-    const storage = localStorage;
-    const storeId = `${id}-seen`;
-    if (isLastStep && !storage.getItem(storeId)) {
-      storage.setItem(storeId, true);
-    }
-  }
-
   handleClickBack = e => {
     e.preventDefault();
     const { helpers } = this.props;
@@ -31,16 +22,33 @@ export default class JoyrideTooltip extends React.Component {
     helpers.prev();
   };
 
+  handleSeen = () => {
+    const { isLastStep, id } = this.props;
+    const storage = localStorage;
+    const storeId = `${id}-seen`;
+    console.log(isLastStep, storeId, storage.getItem(storeId));
+    if (isLastStep && !storage.getItem(storeId)) {
+      setTimeout(() => {
+        console.log('storing key');
+        storage.setItem(storeId, true);
+      }, 500);
+    }
+  };
+
   handleClickClose = e => {
     e.preventDefault();
     const { helpers } = this.props;
-
+    this.handleSeen();
     helpers.close();
   };
 
   handleClickPrimary = e => {
     e.preventDefault();
-    const { continuous, helpers } = this.props;
+    const { continuous, helpers, isLastStep } = this.props;
+
+    if (isLastStep) {
+      this.handleSeen();
+    }
 
     if (!continuous) {
       helpers.close();
