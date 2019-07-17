@@ -1,11 +1,11 @@
 {
-  "name": "react-joyride",
-  "version": "2.0.5",
+  "name": "react-joyride-gs",
+  "version": "2.0.6",
   "description": "Create guided tours for your apps",
   "author": "Gil Barbara <gilbarbara@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gilbarbara/react-joyride.git"
+    "url": "git+https://github.com/arminschleicher/react-joyride.git"
   },
   "bugs": {
     "url": "https://github.com/gilbarbara/react-joyride/issues"
