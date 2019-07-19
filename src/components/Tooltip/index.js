@@ -26,10 +26,8 @@ export default class JoyrideTooltip extends React.Component {
     const { isLastStep, id } = this.props;
     const storage = localStorage;
     const storeId = `${id}-seen`;
-    console.log(isLastStep, storeId, storage.getItem(storeId));
     if (isLastStep && !storage.getItem(storeId)) {
       setTimeout(() => {
-        console.log('storing key');
         storage.setItem(storeId, true);
       }, 500);
     }

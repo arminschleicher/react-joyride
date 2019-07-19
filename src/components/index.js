@@ -88,7 +88,6 @@ class Joyride extends React.Component {
     const { disableCloseOnEsc, debug, run, steps, id, mount } = this.props;
     if (!canUseDOM || !mount) return;
     const storage = localStorage;
-    console.log('JOYRIDE MOUNTED', id);
     const { start } = this.store;
 
     if (validateSteps(steps, debug) && run) {
@@ -101,9 +100,7 @@ class Joyride extends React.Component {
     }
 
     if (!(storage && storage.getItem(`${id}-seen`))) {
-      console.log('setting timeout for tooltip lifecycle');
       setTimeout(() => {
-        console.log('showing tooltip', id);
         this.store.update({
           lifecycle: LIFECYCLE.TOOLTIP,
         });
@@ -389,9 +386,7 @@ class Joyride extends React.Component {
     const { continuous, debug, steps, id, mount, showOnceOnly } = this.props;
     if (!mount) return null;
     const storage = localStorage;
-    console.log('checking mount ', id, storage.getItem(`${id}-seen`), this.props);
     if (showOnceOnly && storage.getItem(`${id}-seen`)) {
-      console.log('shouldnt mount');
       return null;
     }
     const { index, status } = this.state;
