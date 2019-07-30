@@ -118,7 +118,9 @@ export function getScrollParent(element: HTMLElement, skipFix: boolean): HTMLEle
   const hasScrolling = parent.scrollHeight > parent.offsetHeight;
 
   if (!hasScrolling && !skipFix) {
-    parent.style.overflow = 'initial';
+    if (parent.style.overflow !== 'scroll') {
+      parent.style.overflow = 'initial';
+    }
     return scrollDoc();
   }
 
