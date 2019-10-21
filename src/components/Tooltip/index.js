@@ -10,6 +10,7 @@ export default class JoyrideTooltip extends React.Component {
     id: PropTypes.string,
     index: PropTypes.number.isRequired,
     isLastStep: PropTypes.bool.isRequired,
+    onSeen: PropTypes.func,
     setTooltipRef: PropTypes.func.isRequired,
     size: PropTypes.number.isRequired,
     step: PropTypes.object.isRequired,
@@ -23,12 +24,15 @@ export default class JoyrideTooltip extends React.Component {
   };
 
   handleSeen = () => {
-    const { isLastStep, id } = this.props;
+    const { isLastStep, id, onSeen } = this.props;
     const storage = localStorage;
     const storeId = `${id}-seen`;
     if (isLastStep && !storage.getItem(storeId)) {
       setTimeout(() => {
         storage.setItem(storeId, true);
+        if (onSeen && typeof onSeen === 'function') {
+          onSeen(storeId);
+        }
       }, 500);
     }
   };

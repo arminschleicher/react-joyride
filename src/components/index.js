@@ -47,6 +47,7 @@ class Joyride extends React.Component {
     id: PropTypes.string,
     locale: PropTypes.object,
     mount: PropTypes.bool,
+    onSeen: PropTypes.func,
     run: PropTypes.bool,
     scrollOffset: PropTypes.number,
     scrollToFirstStep: PropTypes.bool,
@@ -383,7 +384,7 @@ class Joyride extends React.Component {
 
   render() {
     if (!canUseDOM) return null;
-    const { continuous, debug, steps, id, mount, showOnceOnly } = this.props;
+    const { continuous, debug, steps, id, mount, showOnceOnly, onSeen } = this.props;
     if (!mount) return null;
     const storage = localStorage;
     if (showOnceOnly && storage.getItem(`${id}-seen`)) {
@@ -405,6 +406,7 @@ class Joyride extends React.Component {
           helpers={this.helpers}
           step={step}
           update={this.store.update}
+          onSeen={onSeen}
         />
       );
     }

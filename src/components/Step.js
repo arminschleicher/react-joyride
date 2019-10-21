@@ -30,6 +30,7 @@ export default class JoyrideStep extends React.Component {
     id: PropTypes.string,
     index: PropTypes.number.isRequired,
     lifecycle: PropTypes.string.isRequired,
+    onSeen: PropTypes.func,
     setPopper: PropTypes.func.isRequired,
     size: PropTypes.number.isRequired,
     status: PropTypes.string.isRequired,
@@ -262,7 +263,7 @@ export default class JoyrideStep extends React.Component {
   }
 
   render() {
-    const { continuous, debug, helpers, index, lifecycle, size, step, id } = this.props;
+    const { continuous, debug, helpers, index, lifecycle, size, step, id, onSeen } = this.props;
     const target = getElement(step.target);
 
     if (!validateStep(step) || !is.domElement(target)) {
@@ -290,6 +291,7 @@ export default class JoyrideStep extends React.Component {
               setTooltipRef={this.setTooltipRef}
               size={size}
               step={step}
+              onSeen={onSeen}
             />
           }
           debug={debug}
